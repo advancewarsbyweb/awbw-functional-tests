@@ -1,6 +1,6 @@
 # Installation Steps:
 
-Note for Windows users: Everything in this setup is done inside WSL. A non-wsl environment might 
+Note for Windows users: Everything in this setup is done inside WSL. A non-wsl environment might already have everything installed.
 
 1) Open a terminal, likely in your IDE of choice. Make sure you have Node and NPM installed on your machine. Note that you might have to run `apt-get update`, `apt install node` and `apt install npm` if you don't have them.
 
