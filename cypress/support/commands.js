@@ -24,19 +24,11 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import homepageSelectors from "./selectors/homepageSelectors";
-import * as data from "../fixtures/setup-data"
+import * as accountData from "../personal-automation-account";
 
 Cypress.Commands.add('loginFrontend', (email, password) => {
         cy.get(homepageSelectors.loginDropdown).click();
-        cy.get(homepageSelectors.userNameField).type(data.StandardAccount);
-        cy.get(homepageSelectors.passwordField).type(data.StandardAccountPass); //DO NOT STORE NON-THROWAWAY ACCOUNT PASSWORDS IN THE SETUP-DATA FIXTURE.
+        cy.get(homepageSelectors.userNameField).type(accountData.StandardAccount);
+        cy.get(homepageSelectors.passwordField).type(accountData.StandardAccountPass); //DO NOT STORE NON-THROWAWAY ACCOUNT PASSWORDS IN THE SETUP-DATA FIXTURE.
         cy.get(homepageSelectors.loginButton).click();
-});
-
-Cypress.Commands.add('createOneVsOneGame', () => {
-    cy.request('POST', 
-        "https://awbw.amarriner.com/create.php?maps_id=178725",
-        "game_name=a&game_password=&comment=&maps_id=178725&weather=Clear&fog=N&co_powers=on&funds=1000&starting_funds=0&capture=1000&days=0&unit_limit=50&initialclock=7&unit_initial=days&increment=1&unit_increment=days&maxturn=7&unit_maxturn=days&main_co_tier=0&create=Create+Game&prefs_name=").then(res =>{
-            cy.log(res)
-        });
 });
