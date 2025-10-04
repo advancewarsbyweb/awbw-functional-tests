@@ -1,3 +1,8 @@
+# Welcome
+
+This is the repo for the E2E automation tests for AWBW! 
+
+
 # Installation Steps:
 
 Note for Windows users: Everything in this setup is done inside WSL. A non-wsl environment might already have everything installed.
@@ -13,6 +18,15 @@ sudo apt install libasound2t64
 ```
 This should install all necessary packages to run cypress. Native linux likely has these packages already.
 
-4) run `npx cypress open` in order to open the cypress electron app.
+4) Run `npx cypress open` in order to open the cypress electron app.
+
+5) Also, you can run `npx cypress run` in order to run the cypress tests headlessly.
+
+
+If you are a beginner, please reach out to soul4rent if you are having any issues!
 
 ---
+
+# Want to contribute?
+
+Please read the CONTRIBUTIONS.md file before contributing! All skill levels are welcome to help out!
