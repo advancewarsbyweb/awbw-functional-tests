@@ -3,5 +3,9 @@
     "cypress": "^14.1.0",
     "cypress-real-events": "^1.15.0",
     "mocha": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
   }
 }
