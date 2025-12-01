@@ -1,7 +1,7 @@
 const { it } = require("mocha")
 import homepageSelectors from "../support/selectors/homepageSelectors";
 
-describe('test-login', () => {
+describe('create-game-tests', () => {
     let data: { TestURL: string; };
     let accountData: { StandardAccount: string; StandardAccountPass: string; };
     before(function () {
@@ -19,12 +19,15 @@ describe('test-login', () => {
         cy.visit(data.TestURL);
     })
 
-    it('Users can login to accounts through the UI', function() {
+    // Note: If running this in production, delete the game after testing.
+    it('Basic Create Game Test', () => {
         cy.loginFrontend(accountData.StandardAccount, accountData.StandardAccountPass);
-        
-        // profile data that appears replacing login button
-        cy.get('#profile-menu > [title="'+accountData.StandardAccount+'"]').invoke('attr', 'title')
-            .should('equal', accountData.StandardAccount);
+
+        // create game method includes basic frontend assertions
+        var game_id = cy.createGame(data.TestURL, "Normal_Game", "22313");
+
+        // cleanup
+        cy.deleteGame(data.TestURL, game_id);
     })
 
-  })
+});
