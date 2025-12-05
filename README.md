@@ -19,8 +19,9 @@ sudo apt install libasound2t64
 
 This should install all necessary packages to run cypress. Native linux likely has these packages already.
 
-4. Set all variables in cypress/fixtures/personal-automation-account.json to a THROWAWAY automation account. Create one
-   if you don't already have one!
+4. Run `./environment-setup.sh` to create a throwaway automation account file. Set all variables in
+   cypress/fixtures/personal-automation-account.json to a throwaway automation account. Create one if you
+   don't already have one!
 
 5. Run `npx cypress open` in order to open the cypress electron app. Alternatively, you can run `npx cypress run`
    in order to run the cypress tests headlessly.
