@@ -23,7 +23,7 @@ describe('create-game-tests', () => {
     cy.loginFrontend(accountData.StandardAccount, accountData.StandardAccountPass);
 
     // create game method includes basic frontend assertions
-    cy.createGame(data.TestURL, 'Normal_Game', '22313').then((game_id) => {
+    cy.createGame(data.TestURL, 'Normal_Game', '22313').then((game_id: string) => {
       // cleanup
       cy.deleteGame(data.TestURL, game_id);
     });

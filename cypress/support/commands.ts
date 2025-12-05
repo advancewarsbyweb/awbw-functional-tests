@@ -32,7 +32,7 @@ Cypress.Commands.add('loginFrontend', (email, password) => {
   cy.get(homepageSelectors.loginButton).click();
 });
 
-Cypress.Commands.add('createGame', (baseUrl: string, gameName: string, prefsId: any) => {
+Cypress.Commands.add('createGame', (baseUrl: string, gameName: string, prefsId: string) => {
   cy.visit(`${baseUrl}/create.php?prefs_id=${prefsId}`);
   cy.get('input[name="game_name"]').type(gameName);
   cy.get('input[name="create"]').click();

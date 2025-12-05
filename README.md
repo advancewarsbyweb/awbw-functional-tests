@@ -19,9 +19,11 @@ sudo apt install libasound2t64
 
 This should install all necessary packages to run cypress. Native linux likely has these packages already.
 
-4. Run `npx cypress open` in order to open the cypress electron app.
+4. Run `npx cypress open` in order to open the cypress electron app. Alternatively, you can run `npx cypress run`
+   in order to run the cypress tests headlessly.
 
-5. Also, you can run `npx cypress run` in order to run the cypress tests headlessly.
+Note: If running this for the first time, you might have to run `cypress install` before you are
+able to run `npx cypress run` for the first time.
 
 If you are a beginner, please reach out to soul4rent if you are having any issues!
 
