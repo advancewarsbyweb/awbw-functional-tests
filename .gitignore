@@ -1,3 +1,4 @@
 node_modules
 cypress/screenshots/*
 cypress/fixtures/personal-automation-account.json
+.claude
