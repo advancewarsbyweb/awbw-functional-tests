@@ -9,5 +9,9 @@ declare namespace Cypress {
         joinGame(gameID: any): void
 
         deleteGame(baseUrl: string, gameID: string): void
+
+        enterGame(gameName: string): void
+
+        resign(baseUrl: string, gameName: string): void
     }
 }

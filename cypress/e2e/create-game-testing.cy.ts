@@ -1,5 +1,6 @@
 const { it } = require("mocha")
-import homepageSelectors from "../support/selectors/homepageSelectors";
+// @ts-ignore
+import {v4 as uuidv4} from 'uuid';
 
 describe('create-game-tests', () => {
     let data: { TestURL: string; };
@@ -13,21 +14,38 @@ describe('create-game-tests', () => {
             data = fdata;
             cy.visit(data.TestURL);
         });
-    })
+    });
 
     beforeEach(function () {
         cy.visit(data.TestURL);
-    })
+    });
 
     // Note: If running this in production, delete the game after testing.
     it('Basic Create Game Test', () => {
         cy.loginFrontend(accountData.StandardAccount, accountData.StandardAccountPass);
 
         // create game method includes basic frontend assertions
-        var game_id = cy.createGame(data.TestURL, "Normal_Game", "22313");
+        cy.createGame(data.TestURL, "Normal_Game", "22313")
+            .then((game_id: any) => {
 
-        // cleanup
-        cy.deleteGame(data.TestURL, game_id);
-    })
+                // cleanup
+                cy.deleteGame(data.TestURL, game_id);
+            });
+    });
+
+    it('Basic Join and Resign Game Test', () => {
+        var uuid = uuidv4();
+        cy.loginFrontend(accountData.StandardAccount, accountData.StandardAccountPass);
+        cy.createGame(data.TestURL, uuid, "22313")
+        cy.contains("Join Again As Another Country (Hotseat)").click();
+        cy.get(".submit").click()
+        cy.contains("Start Game").click();
+        cy.contains(uuid).should("be.visible");
+
+        // @ts-ignore
+        cy.enterGame(data.TestURL, uuid);
+        // @ts-ignore
+        cy.resign(accountData.StandardAccountPass);
+    });
 
 });

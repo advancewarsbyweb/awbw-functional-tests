@@ -32,9 +32,10 @@ Cypress.Commands.add('loginFrontend', (email, password) => {
         cy.get(homepageSelectors.loginButton).click();
 });
 
-Cypress.Commands.add("createGame", (baseUrl: string, gameName: string, prefsId: any) => {
+Cypress.Commands.add("createGame", (baseUrl: string, gameName: string, prefsId: any, gamePassword: string = "asdf") => {
     cy.visit(`${baseUrl}/create.php?prefs_id=${prefsId}`);
     cy.get('input[name="game_name"]').type(gameName);
+    cy.get('input[name="game_password"]').type(gamePassword);
     cy.get('input[name="create"]').click();
     cy.url()
         .should("include", "/yourgames.php#game_")
@@ -49,4 +50,18 @@ Cypress.Commands.add("createGame", (baseUrl: string, gameName: string, prefsId: 
 Cypress.Commands.add("deleteGame", (baseUrl: string, gameID: string) => {
     cy.visit(`${baseUrl}/yourgames.php#game_${gameID}`);
     cy.xpath(`//b[text()='Delete Game']`).click({ multiple: true });
-})
+});
+
+// @ts-ignore
+Cypress.Commands.add("enterGame", (baseUrl: string, gameName: string) => {
+    cy.visit(`${baseUrl}/yourgames.php`);
+    cy.contains(gameName).click();
+    cy.url().should("include", "/game.php");
+});
+
+Cypress.Commands.add("resign", (password: string) => {
+    cy.contains("Menu").click();
+    cy.contains("Resign").click();
+    cy.get("input[type=\"password\"]").type(password);
+    cy.get(".resign-conf-btn").click();
+});
