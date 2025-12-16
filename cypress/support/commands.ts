@@ -67,3 +67,29 @@ Cypress.Commands.add('resign', (password: string) => {
   cy.get('input[type="password"]').type(password);
   cy.get('.resign-conf-btn').click();
 });
+
+// unit string REQUIRED for airports
+Cypress.Commands.add('buildUnitOnNthBuilding', (position: number, unit: string = "Infantry") => {
+    cy.get(`.game-building`).eq(position).click()
+    cy.contains(unit).click();
+})
+
+// useful for making infantry capture specific properties
+Cypress.Commands.add('moveNthUnitAndPerformActionOnNthBuilding', (unitPosition: number, buildingPosition: number, actionNumber: number) => {
+    cy.get(`.game-unit`).eq(unitPosition).click();
+    cy.get(`.movement-tile`).invoke('css', 'display', 'none');
+    cy.get(`.game-building`).eq(buildingPosition).click();
+    cy.get(`.menu-option`).eq(actionNumber).click(); // capt button
+})
+
+// to be used for tests such as deleting units
+Cypress.Commands.add('doubleClickNthUnitAndPerformAction', (unitPosition: number, actionNumber: number) => {
+    cy.get(`.game-unit`).eq(unitPosition).dblclick();
+    cy.get(`.menu-option`).eq(actionNumber).click(); // capt button
+})
+
+Cypress.Commands.add('endTurn', () => {
+    cy.get(`#end-turn`).click();
+    cy.get(`.end-turn-conf-btn`).click();
+    cy.wait(6000) // end turn popup cycle
+})
