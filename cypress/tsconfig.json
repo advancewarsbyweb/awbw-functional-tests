@@ -3,7 +3,10 @@
     "target": "es6",
     "lib": ["es6", "dom"],
     "sourceMap": true,
-    "types": ["cypress", "node"]
+    "types": ["cypress", "node"],
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["**/*.ts"]
 }
