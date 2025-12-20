@@ -17,7 +17,7 @@ declare namespace Cypress {
 
     endTurn(): void;
 
-    buildUnitOnNthBuilding(position: int, unit?: string): void;
+    buildUnitOnNthBuilding(position: number, unit?: string): void;
 
     moveNthUnitAndPerformActionOnNthBuilding(unitPosition: number, buildingPosition: number, actionNumber: number): void
 
