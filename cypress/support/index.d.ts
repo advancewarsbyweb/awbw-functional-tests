@@ -3,6 +3,8 @@ declare namespace Cypress {
   interface Chainable<Subject = any> {
     loginFrontend(email: string, password: string): void;
 
+    logoutFrontend(): void;
+
     createGame(baseUrl: string, gameName: string, prefsID: string, gamePassword?: string): any;
 
     readyTopGame(): void;
