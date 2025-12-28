@@ -32,6 +32,11 @@ Cypress.Commands.add('loginFrontend', (email, password) => {
   cy.get(homepageSelectors.loginButton).click();
 });
 
+Cypress.Commands.add('logoutFrontend', () => {
+  cy.get(homepageSelectors.profileMenu).realHover();
+  cy.get(homepageSelectors.logoutLink).should('be.visible').click();
+});
+
 Cypress.Commands.add(
   'createGame',
   (baseUrl: string, gameName: string, prefsId: string, gamePassword: string = 'asdf') => {
