@@ -5,6 +5,4 @@ export default {
   loginButton: '#login',
   profileMenu: '#profile-menu',
   logoutLink: '#profile-menu a[href="logout.php"]',
-  gamesDropdown: '#games-menu', //unused
-  gamesCreateLink: 'a[href="create.php"]', //unused
 };

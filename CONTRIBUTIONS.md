@@ -11,7 +11,7 @@ if there are PR comments!
 Right now, we are automating against production, since it's easy for the AWBW to just point the test automation at
 their local, run the same tests, and see if they pass.
 
-You will have to make your own test account in `cypress/fixtures/personal-automation-account.json` in order to run the
+You will have to make your own test account in `tests/fixtures/personal-automation-account.json` in order to run the
 tests. Please use a throwaway test account instead of an account you care about, and never assume this account is secure.
 
 You are also welcome to comment on any PRs that you see, and help others write quality code!
@@ -26,10 +26,10 @@ All skill levels are welcome to contribute!
 
 ---
 
-# Why Cypress?
+# Why Playwright?
 
-Cypress is relatively easy for beginners to contribute to, and in general it is easier to write reliable E2E tests due
-to built in polling mechanisms in the commands, and the nice friendly way to create automated tests.
+Playwright is relatively easy for beginners to contribute to, and in general it is easy to write reliable E2E tests
+thanks to its auto-waiting locators and friendly tooling (such as UI mode and trace viewer).
 
 We understand that the majority of people that contribute might enjoy development as a casual hobby, so the idea is to
 make the tests easy for the majority of hobbyists to add.
@@ -44,7 +44,7 @@ feel free to check out the issues in Github!
 
 - Make sure there aren't any merge conflicts!
 
-- Make sure all tests pass when you run `npx cypress run`. Run this multiple times to make sure the tests you made
+- Make sure all tests pass when you run `npx playwright test`. Run this multiple times to make sure the tests you made
   aren't flakey!
 
 - Make a PR from your fork branch to the project, and wait for an AWBW developer to be able to take a look!

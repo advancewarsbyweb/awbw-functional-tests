@@ -1,4 +1,7 @@
 node_modules
-cypress/screenshots/*
-cypress/fixtures/personal-automation-account.json
+test-results/
+playwright-report/
+playwright/.cache/
+/playwright*.png
+tests/fixtures/personal-automation-account.json
 .claude

@@ -10,24 +10,22 @@ Note for Windows users: Everything in this setup is done inside WSL. A non-wsl e
 
 2. Run `npm install`
 
-3. IF IN WSL, run the following:
+3. Install the Playwright browser binaries and (on Linux) their system dependencies:
 
 ```
-sudo apt install libnss3
-sudo apt install libasound2t64
+npx playwright install
+npx playwright install-deps
 ```
 
-This should install all necessary packages to run cypress. Native linux likely has these packages already.
+`npx playwright install-deps` uses `apt` under the hood, so on WSL you may need `sudo`. Native linux users can usually skip `install-deps`.
 
 4. Run `./environment-setup.sh` to create a throwaway automation account file. Set all variables in
-   cypress/fixtures/personal-automation-account.json to a throwaway automation account. Create one if you
+   tests/fixtures/personal-automation-account.json to a throwaway automation account. Create one if you
    don't already have one!
 
-5. Run `npx cypress open` in order to open the cypress electron app. Alternatively, you can run `npx cypress run`
-   in order to run the cypress tests headlessly.
-
-Note: If running this for the first time, you might have to run `cypress install` before you are
-able to run `npx cypress run` for the first time.
+5. Run `npx playwright test` to run the tests headlessly. To get the interactive UI mode (great for
+   writing and debugging tests), run `npx playwright test --ui`. To watch them run in a visible browser,
+   run `npx playwright test --headed`.
 
 If you are a beginner, please reach out to soul4rent if you are having any issues!
 
