@@ -34,10 +34,10 @@ describe('gameplay-tests', () => {
     cy.buildUnitOnNthBuilding(0);
     cy.endTurn();
     cy.endTurn();
-    cy.moveNthUnitAndPerformActionOnNthBuilding(0, 1, 0) // capture HQ
-    cy.endTurn()
-    cy.endTurn()
-    cy.doubleClickNthUnitAndPerformAction(0, 0) //capture HQ
+    cy.moveNthUnitAndPerformActionOnNthBuilding(0, 1, 0); // capture HQ
+    cy.endTurn();
+    cy.endTurn();
+    cy.doubleClickNthUnitAndPerformAction(0, 0); //capture HQ
     cy.contains(`Victory`).should('be.visible');
   });
 });
