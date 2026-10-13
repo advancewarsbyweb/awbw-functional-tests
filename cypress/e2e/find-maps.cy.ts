@@ -19,10 +19,10 @@ describe('find-maps', () => {
         // Step 1: Login
         cy.loginFrontend(accountData.StandardAccount, accountData.StandardAccountPass);
 
-        // Step 2: Search Map
+        // Step 2: Search Map (Feel free to add more values to add)
         cy.visit(data.TestURL + "searchmaps.php");
-        cy.get('input[name="name"]').type(mapName);
-        cy.get('input[value="Search"]').click(); 
+        cy.get('input[name="name"]').type(mapName); // Map name
+        cy.get('input[value="Search"]').click(); // Search button
 
         // Step 3: Click on Map Title
         cy.contains('#main a', new RegExp(`^${Cypress._.escapeRegExp(mapName)}$`)).click();
