@@ -3,7 +3,7 @@ import { it } from 'mocha';
 describe('find-maps', () => {
   let data: { TestURL: string };
   let accountData: { StandardAccount: string; StandardAccountPass: string };
-  const mapName = 'Spann Island'; // Type the map you want to find
+  const mapName = '01_TestMapTwoPlayer'; // Type the map you want to find
   before(function () {
     cy.fixture('personal-automation-account.json').then((fdata) => {
       accountData = fdata;
@@ -22,6 +22,7 @@ describe('find-maps', () => {
     // Step 2: Search Map (Feel free to add more values to add)
     cy.visit(data.TestURL + 'searchmaps.php');
     cy.get('input[name="name"]').type(mapName); // Map name
+    cy.get('input[name="categories[]"]').uncheck(); // Default rank filters hide unranked maps
     cy.get('input[value="Search"]').click(); // Search button
 
     // Step 3: Click on Map Title
