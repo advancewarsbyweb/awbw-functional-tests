@@ -3,7 +3,7 @@ import { it } from 'mocha';
 describe('find-maps', () => {
   let data: { TestURL: string };
   let accountData: { StandardAccount: string; StandardAccountPass: string };
-  const mapName = 'Spann Island'; // Type the map you want to find
+  const mapName = 'Expanded Spann Island'; // Type the map you want to find
   before(function () {
     cy.fixture('personal-automation-account.json').then((fdata) => {
       accountData = fdata;
