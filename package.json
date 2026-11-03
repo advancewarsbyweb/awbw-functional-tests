@@ -7,7 +7,6 @@
     "check": "npm run lint && npm run format:check"
   },
   "dependencies": {
-    "cypress": "^14.1.0",
     "cypress-real-events": "^1.15.0",
     "mocha": "^11.1.0",
     "uuid": "^13.0.0"
@@ -17,6 +16,7 @@
     "@types/uuid": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
+    "cypress": "^16.2.0",
     "cypress-xpath": "^2.0.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
