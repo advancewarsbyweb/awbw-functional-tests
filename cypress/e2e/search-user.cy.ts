@@ -23,8 +23,7 @@ describe('search-user', () => {
     // Step 2: Search Users 
     cy.visit(data.TestURL + 'users.php');
     cy.get('#search-text').type(targetUsername); // Type in the target username
-    cy.wait(3000) // Wait for user profiles to load
-    cy.get('a').contains(targetUsername).should('be.visible'); // Check if target username has loaded
+    cy.get('a', {timeout: 1000}).contains(targetUsername).should('be.visible'); // Wait for user profiles to load
 
     // Step 3: Click on Target Username (loads profile)
     cy.get('a').contains(targetUsername).click();
