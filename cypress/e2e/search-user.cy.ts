@@ -1,5 +1,3 @@
-import { it } from 'mocha';
-
 describe('search-user', () => {
   let data: { TestURL: string };
   let accountData: { StandardAccount: string; StandardAccountPass: string };
@@ -23,10 +21,10 @@ describe('search-user', () => {
     // Step 2: Search Users 
     cy.visit(data.TestURL + 'users.php');
     cy.get('#search-text').type(targetUsername); // Type in the target username
-    cy.get('a', {timeout: 1000}).contains(targetUsername).should('be.visible'); // Wait for user profiles to load
+    cy.get('#search-content a').contains(targetUsername).should('be.visible'); // Wait for user profiles to load
 
     // Step 3: Click on Target Username (loads profile)
-    cy.get('a').contains(targetUsername).click();
+    cy.get('#search-content a').contains(targetUsername).click();
 
     // User profile loaded is the same as the one that was typed in by the user
     cy.url().should('contains', targetUsername);

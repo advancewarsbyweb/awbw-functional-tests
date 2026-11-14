@@ -1,4 +1,3 @@
-import { it } from 'mocha';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('create-game-tests', () => {

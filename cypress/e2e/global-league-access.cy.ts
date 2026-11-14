@@ -1,5 +1,3 @@
-import { it } from 'mocha';
-
 describe('global-league-access', () => {
   let data: { TestURL: string };
   let accountData: { StandardAccount: string; StandardAccountPass: string };

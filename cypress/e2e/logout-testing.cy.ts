@@ -1,5 +1,3 @@
-import { it } from 'mocha';
-
 describe('test-logout', () => {
   let data: { TestURL: string };
   let accountData: { StandardAccount: string; StandardAccountPass: string };
