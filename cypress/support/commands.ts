@@ -60,6 +60,46 @@ Cypress.Commands.add('deleteGame', (baseUrl: string, gameID: string) => {
   cy.xpath(`//b[text()='Delete Game']`).click({ multiple: true });
 });
 
+// For Selecting a Specific CO after creating a game
+Cypress.Commands.add('selectCO', (baseUrl: string, gameName: string, coNames: string[]) => {
+  cy.visit(`${baseUrl}/yourgames.php`);
+
+  cy.get('[id^="game_"][id$="_co_selector"]')
+    .should('have.length', coNames.length)
+    // Process done for each Player (This assumes a hotseat game where the bot is both P1 and P2)
+    .each(($selector, index) => {
+      const sel = `#${$selector.attr('id')}`;
+      const coName = coNames[index];
+
+      // Wait until Vue has mounted and rendered the current CO
+      cy.get(`${sel} .do-game-co-image .co-tooltip-title`)
+        .should(($title) => {
+          expect($title.text().trim(), 'CO data rendered').to.not.be.empty;
+        })
+        .then(($title) => {
+          // Case 1: CO selected is the one we already want
+          if ($title.text().trim() === coName) return;
+
+          // Case 2: CO must be selected from the CO Select Window
+          cy.get(`${sel} .do-game-co-image img.co_portrait`).click();
+          cy.get(`${sel} .co_selector_window`)
+            .should('be.visible')
+            .find('.co-tooltip-title')
+            .filter((_i, el) => el.textContent?.trim() === coName)
+            .should('have.length', 1)
+            .closest('a')
+            .click();
+        });
+
+      // Check that CO selected is the correct one
+      cy.get(`${sel} .do-game-co-image .co-tooltip-title`).should(($title) => {
+        expect($title.text().trim()).to.eq(coName);
+      });
+      // Close down the CO Select Window
+      cy.get(`${sel} .co_selector_window`).should('not.exist');
+    });
+});
+
 Cypress.Commands.add('enterGame', (baseUrl: string, gameName: string) => {
   cy.visit(`${baseUrl}/yourgames.php`);
   cy.contains(gameName).click();
@@ -98,6 +138,30 @@ Cypress.Commands.add(
     cy.get(`.menu-option`).eq(actionNumber).click(); // capt button
   }
 );
+
+// To be used for attacking
+Cypress.Commands.add(
+  'attackWithNthUnit',
+  (unitPosition: number) => {
+    cy.get('.game-unit')
+    .eq(unitPosition)
+    .click() // First select the unit
+    .then(($unit) => {
+      const before = $unit[0].outerHTML;
+
+      // Attack the first enemy unit it detects (My guess is it registers top-left to bottom right and going through rows)
+      cy.get('.dmg-square').first().dblclick();
+
+      // Checks Sprite changes in the unit (In Waited mode)
+      cy.get('.game-unit')
+        .eq(unitPosition)
+        .should(($after) => {
+          expect($after[0].outerHTML, 'unit changed after attack').to.not.eq(before);
+        });
+    });
+  }
+);
+
 
 Cypress.Commands.add('endTurn', () => {
   cy.get(`#end-turn`).click();
