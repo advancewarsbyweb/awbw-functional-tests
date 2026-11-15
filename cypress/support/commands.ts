@@ -28,7 +28,7 @@ import homepageSelectors from './selectors/homepageSelectors';
 Cypress.Commands.add('loginFrontend', (email, password) => {
   cy.get(homepageSelectors.loginDropdown).click();
   cy.get(homepageSelectors.userNameField).type(email);
-  cy.get(homepageSelectors.passwordField).type(password); //DO NOT STORE NON-THROWAWAY ACCOUNT PASSWORDS IN THE SETUP-DATA FIXTURE.
+  cy.get(homepageSelectors.passwordField).type(password, { log: false }); //DO NOT STORE NON-THROWAWAY ACCOUNT PASSWORDS IN THE SETUP-DATA FIXTURE.
   cy.get(homepageSelectors.loginButton).click();
 });
 
@@ -69,7 +69,7 @@ Cypress.Commands.add('enterGame', (baseUrl: string, gameName: string) => {
 Cypress.Commands.add('resign', (password: string) => {
   cy.contains('Menu').click();
   cy.contains('Resign').click();
-  cy.get('input[type="password"]').type(password);
+  cy.get('input[type="password"]').type(password, { log: false });
   cy.get('.resign-conf-btn').click();
 });
 

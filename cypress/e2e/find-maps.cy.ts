@@ -1,5 +1,3 @@
-import { it } from 'mocha';
-
 describe('find-maps', () => {
   let data: { TestURL: string };
   let accountData: { StandardAccount: string; StandardAccountPass: string };
