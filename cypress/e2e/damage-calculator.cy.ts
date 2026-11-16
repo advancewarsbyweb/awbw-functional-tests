@@ -8,7 +8,7 @@ type Side = {
   terrain: keyof typeof calc.terrain;
 };
 
-// Fill one side ('a' attacker, 'd' defender) of the damage calculator form
+// prefix: 'a' attacker, 'd' defender
 function fillSide(prefix: 'a' | 'd', side: Side) {
   cy.get(`input[name="${prefix}_co"][value="${calc.co[side.co ?? 'Andy']}"]`).check();
   cy.get(`select[name="${prefix}_power"]`).select(side.power ?? 'N');
@@ -17,23 +17,20 @@ function fillSide(prefix: 'a' | 'd', side: Side) {
   cy.get(`input[name="${prefix}_terrain"][value="${calc.terrain[side.terrain]}"]`).check();
 }
 
-// The results box covers part of the form once shown (the page also remembers the last
-// result), so hide it before filling the form in again
+// The last result covers part of the form, so hide it first
 function calculate(attacker: Side, defender: Side) {
   cy.get('body').then(($body) => {
     if ($body.find(`${calc.results}:visible`).length) {
-      // What its [Hide Results] link does (the link's own href throws a script error)
+      // the [Hide Results] link throws a script error
       cy.get(calc.results).invoke('css', 'visibility', 'hidden');
     }
   });
   fillSide('a', attacker);
   fillSide('d', defender);
   cy.get('input[name="calculate"]').click();
-  cy.get(calc.results).should('be.visible'); // the new page's box, not the hidden old one
+  cy.get(calc.results).should('be.visible');
 }
 
-// The damage calculator page needs no login. Each case below sits on a rounding or CO rule
-// that is easy to get wrong when reimplementing the damage formula.
 describe('damage-calculator', () => {
   let data: { TestURL: string };
   before(function () {
@@ -47,13 +44,13 @@ describe('damage-calculator', () => {
   });
 
   it('Damage at or above x.95 rounds up to the next whole percent', () => {
-    // Best luck: 0.8 * (55 + 9) * 0.8 = 40.96, shown as 41 (truncating would give 40)
+    // max: 40.96
     calculate({ unit: 'Tank', hp: 8, terrain: 'Plain' }, { unit: 'Tank', hp: 10, terrain: 'Wood' });
     cy.get(calc.results).should('contain', 'Attack: 35% - 41%');
   });
 
   it('A hit worth 0.99 still does 1%', () => {
-    // No luck: 1 * 1.0 * 0.99 (one star under a 1 HP defender) = 0.99, shown as 1
+    // min: 0.99
     calculate(
       { unit: 'Infantry', hp: 10, terrain: 'Plain' },
       { unit: 'Md.Tank', hp: 1, terrain: 'Plain' }
@@ -62,14 +59,14 @@ describe('damage-calculator', () => {
   });
 
   it('An exact x.95 on paper can fall just short in floating point', () => {
-    // Best luck: 0.5 * (125 + 9) * 0.85 = 56.95 on paper, shown as 56
+    // max: 56.95
     calculate(
       { unit: 'Neotank', hp: 5, terrain: 'Plain' },
       { unit: 'Infantry', hp: 5, terrain: 'City' }
     );
     cy.get(calc.results).should('contain', 'Attack: 53% - 56%');
 
-    // No luck: 0.5 * 85 * 0.94 = 39.95 on paper, shown as 39
+    // min: 39.95
     calculate(
       { unit: 'Tank', hp: 5, terrain: 'Plain' },
       { unit: 'Recon', hp: 6, terrain: 'Plain' }
@@ -98,7 +95,6 @@ describe('damage-calculator', () => {
     );
     cy.get(calc.results).should('contain', 'Attack: 49% - 57%');
 
-    // Max: his indirect penalty. Sensei: the penalty on her vehicles covers Rockets too.
     for (const co of ['Max', 'Sensei'] as const) {
       calculate(
         { co, unit: 'Rocket', hp: 10, terrain: 'Plain' },

@@ -1,4 +1,3 @@
-// Ids used by the form on calculator.php
 export default {
   co: { Andy: '1', Javier: '27', Max: '7', Sensei: '13' },
   unit: {
