@@ -115,10 +115,27 @@ Cypress.Commands.add('waitForGameSocket', () => {
 // Reload the game page (so moved units sit where the server has them) and wait until it's ready.
 // The page goes on setting up after its socket opens, and a menu opened before it finishes is
 // closed again; fetch_actions.php is the last request it makes, so wait for that and a moment.
+// Now and then the game's socket drops ("The connection was interrupted"); then reload again.
 Cypress.Commands.add('reloadGame', () => {
-  cy.intercept('POST', '**/api/game/fetch_actions.php').as('fetchActions');
-  cy.reload();
-  cy.wait('@fetchActions', { timeout: 20000 });
+  const attempt = (tries: number) => {
+    cy.intercept('POST', '**/api/game/fetch_actions.php').as('fetchActions');
+    cy.reload();
+    cy.wait('@fetchActions', { timeout: 20000 });
+    // Wait while the socket is still connecting (0), then see whether it opened
+    cy.window({ timeout: 20000 })
+      .should((win) => {
+        const socket = (win as unknown as { webSocket?: WebSocket }).webSocket;
+        expect(socket?.readyState, 'socket settled').to.be.oneOf([1, 2, 3]);
+      })
+      .then((win) => {
+        const socket = (win as unknown as { webSocket?: WebSocket }).webSocket;
+        if (socket?.readyState !== 1 && tries > 1) {
+          cy.wait(5000); // give the server a moment before asking again
+          attempt(tries - 1);
+        }
+      });
+  };
+  attempt(3);
   cy.waitForGameSocket();
   cy.wait(1000);
 });
@@ -242,33 +259,34 @@ Cypress.Commands.add('buildUnitAt', (x: number, y: number, unit: string) => {
 // sit outside the map's clipped area, where Cypress calls it hidden though it works.
 const shown = (_: number, el: HTMLElement) => el.offsetParent !== null;
 
-// Move a unit and leave its action menu open. The tile may hold a unit to Load into or Join.
 // Select a unit and click a tile it can move to, without checking what menu opens (if any).
-// Movement tiles sit one pixel up and left of their 16px tile; they're drawn over the map, which
-// Cypress can see as covering them, so force.
+// The page builds the unit's path from mouse movement over the map, reading pageX/pageY, so move
+// a real MouseEvent onto the tile first (a plain triggered event has no position). Movement tiles
+// sit one pixel up and left of their 16px tile and are drawn over the map, which Cypress can see as
+// covering them, so force.
 Cypress.Commands.add('clickMoveTo', (fromX: number, fromY: number, toX: number, toY: number) => {
   cy.waitForGameSocket();
   cy.unitAt(fromX, fromY).click();
   const tile = `.movement-tile[style*="left: ${toX * 16 - 1}px"][style*="top: ${toY * 16 - 1}px"]`;
-  cy.get(tile).first().trigger('mousemove', { force: true });
+  cy.get(tile).should('exist');
+  cy.window().then((w) => {
+    const r = w.document.querySelector('#map-background')!.getBoundingClientRect();
+    const [x, y] = [r.left + toX * 16 + 8, r.top + toY * 16 + 8];
+    cy.get('#gamemap').trigger('mousemove', {
+      eventConstructor: 'MouseEvent',
+      clientX: x,
+      clientY: y,
+      pageX: x + w.scrollX,
+      pageY: y + w.scrollY,
+      force: true,
+    });
+  });
   cy.get(tile).first().click({ force: true });
 });
 
-// Now and then the page takes the click on the tile without opening the menu (it reads the
-// path from mouse movement, which a test doesn't make), so try again, up to three times.
+// Move a unit and leave its action menu open. The tile may hold a unit to Load into or Join.
 Cypress.Commands.add('moveUnitTo', (fromX: number, fromY: number, toX: number, toY: number) => {
-  const attempt = (tries: number) => {
-    cy.clickMoveTo(fromX, fromY, toX, toY);
-    cy.get('.unit-options-game').then(($menus) => {
-      const open = $menus.find('.menu-option').filter(shown).length > 0;
-      if (!open && tries > 1) {
-        cy.get('body').type('{esc}');
-        cy.reloadGame();
-        attempt(tries - 1);
-      }
-    });
-  };
-  attempt(3);
+  cy.clickMoveTo(fromX, fromY, toX, toY);
   cy.get('.unit-options-game .menu-option').filter(shown).should('not.have.length', 0);
 });
 
