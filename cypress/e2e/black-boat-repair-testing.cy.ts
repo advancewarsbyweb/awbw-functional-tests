@@ -27,7 +27,6 @@ describe('black-boat-repair-tests', () => {
     cy.loginFrontend(accountData.StandardAccount, accountData.StandardAccountPass);
   });
 
-  // Note: if running this in production, delete the game after testing.
   it('Black Boat repair without the funds for 1 HP repairs nothing', function () {
     if (!data.BlackBoatMapId) {
       this.skip();

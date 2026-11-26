@@ -38,7 +38,6 @@ describe('transport-tests', () => {
     cy.reloadGame();
   };
 
-  // Note: if running this in production, delete the game after testing.
   it('T-Copter over Sea has no Unload; Cruiser at sea does', function () {
     if (!data.TransportMapId) {
       this.skip();
@@ -99,7 +98,6 @@ describe('transport-tests', () => {
     );
   });
 
-  // Note: if running this in production, delete the game after testing.
   it('A loaded APC has no Join; an empty one does', function () {
     if (!data.TransportMapId) {
       this.skip();
